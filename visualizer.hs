@@ -31,11 +31,6 @@ grey   = Color3 0.4 0.4 0.4
 
 colors = [ red, green, blue, yellow, violet, orange, grey ]
 
-tPiece =  [ (0, 0, 0),
-            (0, 1, 0),
-            (0, 2, 0),
-            (1, 1, 0) ]
-
 makeState :: IO State
 makeState = do
    alt  <- newIORef 0
@@ -46,12 +41,6 @@ makeState = do
                     cameraAzimuth  = az,
                     cameraDistance = dist,
                     displayedPieceIndices = idx }
-
-toVector :: Point -> (Vector3 GLfloat)
-toVector (x, y, z) = (Vector3
-                      (fromIntegral x)
-                      (fromIntegral y)
-                      (fromIntegral z))
 
 myInit :: IO ()
 myInit = do
