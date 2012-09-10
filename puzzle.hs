@@ -63,17 +63,17 @@ vPiece = Set.fromList [ (0, 0, 0),
                         (0, 1, 0),
                         (1, 0, 0) ]
 
-allPieces = [ tPiece, 
-              zPiece, 
-              lPiece, 
-              lPiece, 
-              lPiece, 
+allPieces = [ tPiece,
+              zPiece,
+              lPiece,
+              lPiece,
+              lPiece,
               lPiece,
               vPiece ]
 
 --- The box
 box :: PointSet
-box = Set.fromList [ (x, y, z) | 
+box = Set.fromList [ (x, y, z) |
                      x <- [0..2],
                      y <- [0..2],
                      z <- [0..2] ]
@@ -83,16 +83,16 @@ pieceWithinBox = (`Set.isSubsetOf` box)
 
 --- Enumerate all possible unique legal orientations of a piece
 legalOrientations :: Configuration -> [Configuration]
-legalOrientations piece = nub $ filter pieceWithinBox $ 
+legalOrientations piece = nub $ filter pieceWithinBox $
                           allOrienations piece
     where allOrienations piece =
-              [ (translation . rotation) piece | 
-                rotation    <- allRotations, 
+              [ (translation . rotation) piece |
+                rotation    <- allRotations,
                 translation <- allTranslations ]
 
 --- Intersection and union of points in pieces!
 intersects :: PointSet -> PointSet -> Bool
-intersects piece piece' = 
+intersects piece piece' =
     not $ Set.null $ Set.intersection piece piece'
 
 union :: PointSet -> PointSet -> PointSet
@@ -104,35 +104,27 @@ checkSolution placedPieces = (foldr1 union placedPieces) == box
 
 --- Solve the puzzle using backtracking
 canAddTo :: [Configuration] -> Configuration -> Bool
-canAddTo placedPieces placed' = 
+canAddTo placedPieces placed' =
     not $ any (intersects placed') placedPieces
 
 legalOrientationsAlist' = [ (piece, (legalOrientations piece)) |
                             piece <- allPieces ]
 
-legalOrientations' piece =   
+legalOrientations' piece =
     case (lookup piece legalOrientationsAlist') of
       Just orientations -> orientations
       Nothing           -> []
-              
+
 solvePuzzle :: [Configuration] -> [[Configuration]]
 solvePuzzle pieces = solvePuzzle' pieces []
     where solvePuzzle' :: [Configuration] -> [Configuration] -> [[Configuration]]
           solvePuzzle' []      placedPieces
               | checkSolution placedPieces = return placedPieces
               | otherwise                  = []
-          solvePuzzle' (u:us)  placedPieces = 
+          solvePuzzle' (u:us)  placedPieces =
               do placed' <- legalOrientations' u
                  True    <- return $ canAddTo placedPieces placed'
                  solvePuzzle' us (placed':placedPieces)
 
 
 main = do putStr $ show $ (solvePuzzle allPieces) !! 0
-
-
---- ideas: for 2nd rev, make an Oriented monad (using Writer) to log
----  the moves that are required to take from base configuration to final.
----  (Each) final answer will then be an alist [(Configuration, Oriented Configuration)] ;
--- and the extra type kept in Oriented is [Move], 
--- data Move = Translation (Piece -> Piece)
---           | Rotation    (Piece -> Piece)
