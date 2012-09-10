@@ -83,27 +83,21 @@ display state = do
 keyboard :: State -> KeyboardMouseCallback
 keyboard state (Char c) Down _ _ =
     case c of
-      '='   -> do putStrLn "Zooming in"
-                  cameraDistance state $~ (/1.1)
+      '='   -> do cameraDistance state $~ (/1.1)
                   postRedisplay Nothing
-      '-'   -> do putStrLn "Zooming out"
-                  cameraDistance state $~ (*1.1)
+      '-'   -> do cameraDistance state $~ (*1.1)
                   postRedisplay Nothing
       '\27' -> exitWith ExitSuccess
       _     -> return ()
 keyboard state (SpecialKey key) Down _ _ =
   case key of
-    KeyUp    -> do putStrLn "Rotating up"
-                   cameraAltitude state $~ (+10)
+    KeyUp    -> do cameraAltitude state $~ (+10)
                    postRedisplay Nothing
-    KeyDown  -> do putStrLn "Rotating down"
-                   cameraAltitude state $~ (+(-10))
+    KeyDown  -> do cameraAltitude state $~ (+(-10))
                    postRedisplay Nothing
-    KeyLeft  -> do putStrLn "Rotating left"
-                   cameraAzimuth state $~ (+(-10))
+    KeyLeft  -> do cameraAzimuth state $~ (+(-10))
                    postRedisplay Nothing
-    KeyRight -> do putStrLn "Rotating right"
-                   cameraAzimuth state $~ (+10)
+    KeyRight -> do cameraAzimuth state $~ (+10)
                    postRedisplay Nothing
     _        -> return ()
 
