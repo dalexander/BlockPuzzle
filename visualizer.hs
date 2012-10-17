@@ -23,8 +23,8 @@ solution = [[(1,0,0),(1,0,1),(2,0,1)],
 
 makeState :: IO State
 makeState = do
-  alt  <- newIORef 0
-  az   <- newIORef 0
+  alt  <- newIORef (-30)
+  az   <- newIORef 20
   dist <- newIORef 10
   idx  <- newIORef [1..7]
   return $ State { cameraAltitude = alt,
