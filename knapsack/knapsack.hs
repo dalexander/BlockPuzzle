@@ -1,3 +1,4 @@
+import Control.Monad (guard)
 
 type Bound   = Int
 type Unbound = [Int]
@@ -18,11 +19,10 @@ knapsack possibilities = knapsack' possibilities []
           knapsack' [] bindings
               | (sum bindings == 10) = [bindings]
               | otherwise            = []
-          knapsack' (u:us) bindings = 
-              do 
+          knapsack' (u:us) bindings =
+              do
                 v <- u
-                True <- return (sum(v:bindings) <= 10)
+                guard $ (sum(v:bindings) <= 10)
                 knapsack' us (v:bindings)
-              
 
-
+main = print $ knapsack possibleSettings

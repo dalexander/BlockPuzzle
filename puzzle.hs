@@ -1,4 +1,5 @@
 import Control.Applicative
+import Control.Monad (guard)
 import Text.Printf
 import Data.List (nub, nubBy)
 import qualified Data.Set as Set
@@ -123,8 +124,8 @@ solvePuzzle pieces = solvePuzzle' pieces []
               | otherwise                  = []
           solvePuzzle' (u:us)  placedPieces =
               do placed' <- legalOrientations' u
-                 True    <- return $ canAddTo placedPieces placed'
+                 guard $ canAddTo placedPieces placed'
                  solvePuzzle' us (placed':placedPieces)
 
 
-main = do putStr $ show $ (solvePuzzle allPieces) !! 0
+main = do print $ (solvePuzzle allPieces) !! 0
